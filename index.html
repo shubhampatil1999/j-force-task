@@ -1,0 +1,31 @@
+<!-- appointmentForm.html -->
+<template>
+    <lightning-card title="Appointment Form">
+        <div class="slds-p-around_medium">
+            <lightning-record-edit-form object-api-name="Appointment_Details__c" onsuccess={handleSuccess}>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <lightning-input-field field-name="Contact__c" required></lightning-input-field>
+                    </div>
+                    <div class="slds-col">
+                        <lightning-input-field field-name="Subject__c" required></lightning-input-field>
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <lightning-input-field field-name="Appointment_Date__c" value={selectedDate} onchange={handleDateChange} type="date" required></lightning-input-field>
+                    </div>
+                    <div class="slds-col">
+                        <lightning-input-field field-name="Appointment_Time__c" value={selectedTime} onchange={handleTimeChange} type="time" required></lightning-input-field>
+                    </div>
+                    <div class="slds-col">
+                        <lightning-input-field field-name="Description__c" required></lightning-input-field>
+                    </div>
+                </div>
+                <div class="slds-m-top_medium">
+                    <lightning-button type="submit" label="Save" variant="brand" onclick={handleSubmit}></lightning-button>
+                </div>
+            </lightning-record-edit-form>
+        </div>
+    </lightning-card>
+</template>

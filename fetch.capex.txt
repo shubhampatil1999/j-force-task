@@ -1,0 +1,38 @@
+public without sharing class fetch {
+    @AuraEnabled(cacheable=true)
+    public static boolean fetchAppointments(Date d1, String t1) {
+        List<Appointment_Slots__c> appointments = new List<Appointment_Slots__c>();
+        String[] strTimeSplit = t1.split(':');
+        
+        Integer providedHours = Integer.valueOf(strTimeSplit[0]);
+        System.debug('providedHours'+providedHours);
+        Integer providedMinutes = Integer.valueOf(strTimeSplit[1]);
+        System.debug('providedMinutes'+providedMinutes);
+        
+        try {
+            appointments = [SELECT Id, Start_Time__c, EndTime__c FROM Appointment_Slots__c  
+                            WHERE Appointment_Date__c = :d1 AND isActive__c = True];
+            
+            for (Appointment_Slots__c appointment : appointments) {
+                Integer endHours = appointment.EndTime__c.hour();
+                Integer endMinutes = appointment.EndTime__c.minute();
+                Integer startHours = appointment.Start_Time__c.hour();
+                Integer startMinutes = appointment.Start_Time__c.minute();
+                System.debug('endHours'+endHours);
+                System.debug('endMinutes'+endMinutes);
+                
+                if ((endHours > providedHours || (endHours == providedHours && endMinutes >= providedMinutes)) &&
+                    (startHours < providedHours || (startHours == providedHours && startMinutes <= providedMinutes))) {
+                    System.debug('Appointment Slot Date exists');
+                    return true;
+                }
+            }
+            
+            System.debug('Appointment slot Date not exists');
+            return false;
+        } catch(Exception e) {
+            System.debug('Error fetching appointments: ' + e.getMessage());
+            throw e;
+        }      
+    }
+}

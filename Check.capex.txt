@@ -1,0 +1,19 @@
+public without sharing class Check {
+	@AuraEnabled
+    public static Boolean checkDateTime(Date d1, string t1) {
+        try {
+            List<Appointment_Details__c> existingAppointments = [SELECT Id FROM Appointment_Details__c WHERE Appointment_Date__c = :d1 AND dateTime__c = :t1];
+            System.debug(existingAppointments);
+            if (existingAppointments.isEmpty()) {
+                System.debug('No appointments found');
+                return true;
+            } else {
+                System.debug('appointment already exists');
+                return false;
+            }
+        } catch (Exception e) {
+            System.debug('Error checking appointment details: ' + e.getMessage());
+            throw e;
+        }
+    }
+}
